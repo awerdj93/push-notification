@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,8 +18,6 @@ public class NotificationServiceImpl implements NotificationService{
 
 	@Autowired
 	private UserRepository userRepository;
-
-
 
 	@Override
 	public Long addUser(UserDTO userDTO) {
@@ -51,6 +48,14 @@ public class NotificationServiceImpl implements NotificationService{
 			return userDTO;
    		}
 		}).collect(Collectors.toList());
+		for (int i=0; i<result.size(); i++){
+			User user1 = new User();
+			BeanUtils.copyProperties(result.get(i),user1);
+			if(user1.getUserId()==null){
+				result.remove(i);
+			}
+
+		}
 		return result;
 	}
 
@@ -61,12 +66,12 @@ public class NotificationServiceImpl implements NotificationService{
 		BeanUtils.copyProperties(userDTO, user);
 		userRepository.save(user);
 		List<UserDTO> existingUserDTO=findAllUser();
-		User user1 = new User();
+		User user2 = new User();
 		for (int i=0; i< existingUserDTO.size(); i++){
 
-			BeanUtils.copyProperties(existingUserDTO.get(i), user1);
-			if (user1.getUserId()==user.getUserId()){
-				Long id = user1.getId();
+			BeanUtils.copyProperties(existingUserDTO.get(i), user2);
+			if (user2.getUserId()==user.getUserId()){
+				Long id = user2.getId();
 				deleteByUserIdAndId(user.getUserId(),id);
 			}
 		}

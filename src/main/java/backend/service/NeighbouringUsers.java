@@ -17,11 +17,15 @@ public class NeighbouringUsers {
         User user1= new User();
         if (ss<5.0){
             BeanUtils.copyProperties(user, user1);
+
         }
         return user1;
     }
 
     public static <parseString> double distance(String origins, String destinations) throws Exception{
+        //origins="Buona vista MRT, Singapore";
+        //destinations = "Clementi MRT, Singapore";
+
         try {
             origins = URLEncoder.encode(origins, "UTF-8");
         } catch (UnsupportedEncodingException e) {
