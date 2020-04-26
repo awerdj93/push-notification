@@ -28,8 +28,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.flywaydb:flyway-core'
 	
+    	compile 'com.google.code.gson:gson:2.8.0'
+	compile 'org.json:json:20171018'
+    
+	
     	
-	implementation 'com.google.code.gson:gson:2.8.6'
+	
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'

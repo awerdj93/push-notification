@@ -10,7 +10,7 @@ import java.util.List;
 public interface NotificationService {
 	public List<UserDTO> findAllUser();
 	public List<SellerDTO> findAllSeller();
-	public Long addSeller(SellerDTO sellerDTO) ;
+	public List<UserDTO> addSeller(SellerDTO sellerDTO) throws Exception ;
 
 	public Long addUser(UserDTO userDTO);
 

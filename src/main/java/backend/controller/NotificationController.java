@@ -39,7 +39,7 @@ public class NotificationController{
 
 	@PostMapping("sellers/{sellerId}/notifications")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Long addSeller(@RequestBody SellerDTO sellerDTO){
+	public List<UserDTO> addSeller(@RequestBody SellerDTO sellerDTO) throws Exception {
 		return notificationService.addSeller(sellerDTO);
 	}
 
