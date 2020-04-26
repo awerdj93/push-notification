@@ -33,15 +33,12 @@ public class User implements Serializable{
     private String user_addr;
     private String user_email;
 
-
-
-
-
     public Long getUserId() {
         return userId;
     }
-
-
+    public Long getId() {
+        return id;
+    }
     public String getUserAddr() {
         return user_addr;
     }

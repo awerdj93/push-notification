@@ -1,14 +1,10 @@
 package backend.controller;
-
 import backend.dto.UserDTO;
 import backend.dto.SellerDTO;
 import backend.service.NotificationService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,27 +20,28 @@ public class NotificationController{
 		return notificationService.findAllUser();
 	}
 
-	@GetMapping("/sellers/notifications")
-	@ResponseStatus(HttpStatus.OK)
-	public List<SellerDTO> findAllSeller() {
-		return notificationService.findAllSeller();
-	}
-
 	@PostMapping("/users/{userId}/notifications")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Long addUser(@RequestBody UserDTO userDTO) {
 		return notificationService.addUser(userDTO);
 	}
 
+	@PutMapping("/users/{userId}/notifications")
+	@ResponseStatus(HttpStatus.OK)
+	public void update(@RequestBody UserDTO userDTO) {
+		notificationService.update(userDTO);
+	}
+
+
+	@DeleteMapping("/users/{userId}/notifications/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteByUserIdAndId(@RequestBody Long userId, Long id) {
+		notificationService.deleteByUserIdAndId(userId, id);
+	}
 
 	@PostMapping("sellers/{sellerId}/notifications")
 	@ResponseStatus(HttpStatus.CREATED)
 	public List<UserDTO> addSeller(@RequestBody SellerDTO sellerDTO) throws Exception {
 		return notificationService.addSeller(sellerDTO);
 	}
-
-
-
-
-	
 }

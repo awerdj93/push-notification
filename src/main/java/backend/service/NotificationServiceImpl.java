@@ -1,37 +1,14 @@
 package backend.service;
-
 import backend.dto.SellerDTO;
 import backend.dto.UserDTO;
-import backend.example.Distance;
 import backend.model.Seller;
 import backend.model.User;
 import backend.repository.UserRepository;
-import backend.repository.SellerRepository;
-import backend.repository.UserRepository;
 import java.util.List;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import lombok.Data;
-import org.hibernate.mapping.Map;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.io.*;
-import javax.net.ssl.HttpsURLConnection;
 
-
-import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -43,8 +20,7 @@ public class NotificationServiceImpl implements NotificationService{
 	@Autowired
 	private UserRepository userRepository;
 
-	@Autowired
-	private SellerRepository sellerRepository;
+
 
 	@Override
 	public Long addUser(UserDTO userDTO) {
@@ -59,32 +35,53 @@ public class NotificationServiceImpl implements NotificationService{
 	public List<UserDTO> addSeller(SellerDTO sellerDTO)  throws Exception{
 		Seller seller = new Seller();
 		BeanUtils.copyProperties(sellerDTO, seller);
-		seller = sellerRepository.save(seller);
+		//seller = sellerRepository.save(seller);
 		Iterable<User> iterable = userRepository.findAll();
 		Seller finalSeller = seller;
 		List<UserDTO> result = StreamSupport.stream(iterable.spliterator(), false).map(new Function<User, UserDTO>() {
    		@Override
    		public UserDTO apply(User user) {
 			try {
-				user= distance.users(user,finalSeller);
+				user= NeighbouringUsers.users(user,finalSeller);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 			UserDTO userDTO = new UserDTO();
-
 			BeanUtils.copyProperties(user, userDTO);
-
-
 			return userDTO;
-
-		}
+   		}
 		}).collect(Collectors.toList());
 		return result;
 	}
 
 
+	@Override
+	public void update(UserDTO userDTO){
+		User user = new User();
+		BeanUtils.copyProperties(userDTO, user);
+		userRepository.save(user);
+		List<UserDTO> existingUserDTO=findAllUser();
+		User user1 = new User();
+		for (int i=0; i< existingUserDTO.size(); i++){
 
+			BeanUtils.copyProperties(existingUserDTO.get(i), user1);
+			if (user1.getUserId()==user.getUserId()){
+				Long id = user1.getId();
+				deleteByUserIdAndId(user.getUserId(),id);
+			}
+		}
+	}
+
+	@Override
+	public void deleteByUserIdAndId(Long userId, Long id) {
+		Optional<User> userOpt = userRepository.findById(id);
+		if(userOpt.isPresent()) {
+			User user = userOpt.get();
+			if(user.getUserId().equals(userId)) {
+				userRepository.deleteById(id);
+			}
+		}
+	}
 
 
 
@@ -105,26 +102,4 @@ public class NotificationServiceImpl implements NotificationService{
 
 		return result;
 	}
-
-
-	@Override
-	public List<SellerDTO> findAllSeller() {
-		Iterable<Seller> iterable = sellerRepository.findAll();
-
-		List<SellerDTO> result = StreamSupport.stream(iterable.spliterator(), false).map(new Function<Seller, SellerDTO>() {
-			@Override
-			public SellerDTO apply(Seller seller) {
-				SellerDTO sellerDTO = new SellerDTO();
-				BeanUtils.copyProperties(seller, sellerDTO);
-
-				return sellerDTO;
-			}
-		}).collect(Collectors.toList());
-
-		return result;
-	}
-
-
-
-
 }
