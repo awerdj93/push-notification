@@ -29,7 +29,7 @@ public class NotificationServiceImpl implements NotificationService{
 
 
 	@Override
-	public List<UserDTO> addSeller(SellerDTO sellerDTO)  throws Exception{
+	public List<UserDTO> sendSdtoForUMailingList(SellerDTO sellerDTO)  throws Exception{
 		Seller seller = new Seller();
 		BeanUtils.copyProperties(sellerDTO, seller);
 		//seller = sellerRepository.save(seller);

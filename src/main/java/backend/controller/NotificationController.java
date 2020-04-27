@@ -20,7 +20,9 @@ public class NotificationController{
 		return notificationService.findAllUser();
 	}
 
-	@PostMapping("/users/{userId}/notifications")
+
+
+	@PostMapping("/users/{userId}/notifications")//This saves a record of userdto, who subscribed for the email notification service in the database
 	@ResponseStatus(HttpStatus.CREATED)
 	public Long addUser(@RequestBody UserDTO userDTO) {
 		return notificationService.addUser(userDTO);
@@ -39,9 +41,9 @@ public class NotificationController{
 		notificationService.deleteByUserIdAndId(userId, id);
 	}
 
-	@PostMapping("sellers/{sellerId}/notifications")
+	@PostMapping("sellers/{sellerId}/notifications")//this method returns a list of userdto neighbouring seller upon posting sellerdto.
 	@ResponseStatus(HttpStatus.CREATED)
-	public List<UserDTO> addSeller(@RequestBody SellerDTO sellerDTO) throws Exception {
-		return notificationService.addSeller(sellerDTO);
+	public List<UserDTO> sendSdtoForUMailingList(@RequestBody SellerDTO sellerDTO) throws Exception {
+		return notificationService.sendSdtoForUMailingList(sellerDTO);
 	}
 }

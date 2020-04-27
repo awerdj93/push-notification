@@ -1,6 +1,8 @@
 # backend-team-2
 
-###Created review microService
+###Created notification microService
+
+# This service returns a list of userdto neighbouring seller upon posting a sellerdto.
 
 
 
