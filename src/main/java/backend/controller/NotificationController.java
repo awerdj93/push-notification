@@ -41,7 +41,7 @@ public class NotificationController{
 		notificationService.deleteByUserIdAndId(userId, id);
 	}
 
-	@PostMapping("sellers/{sellerId}/notifications")//this method returns a list of userdto neighbouring seller upon posting sellerdto.
+	@PostMapping("sellers/{sellerId}/notifications")
 	@ResponseStatus(HttpStatus.CREATED)
 	public List<UserDTO> sendSdtoForUMailingList(@RequestBody SellerDTO sellerDTO) throws Exception {
 		return notificationService.sendSdtoForUMailingList(sellerDTO);

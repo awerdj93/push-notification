@@ -1,7 +1,4 @@
 package backend.dto;
-
-
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,17 +6,7 @@ import lombok.Setter;
 @Setter
 public class UserDTO {
        private Long id;
-       
        private Long userId;
-     
-   
-    
-    
        private String user_addr;
        private String user_email;
-
-
-
-
-
 }

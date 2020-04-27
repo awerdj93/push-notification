@@ -4,10 +4,14 @@ import backend.dto.UserDTO;
 import backend.model.Seller;
 import backend.model.User;
 import backend.repository.UserRepository;
+
+import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -48,13 +52,13 @@ public class NotificationServiceImpl implements NotificationService{
 			return userDTO;
    		}
 		}).collect(Collectors.toList());
-		for (int i=0; i<result.size(); i++){
+		for (Iterator<UserDTO> i = result.iterator(); i.hasNext();) {
+			UserDTO userdto1 = i.next();
 			User user1 = new User();
-			BeanUtils.copyProperties(result.get(i),user1);
-			if(user1.getUserId()==null){
-				result.remove(i);
+			BeanUtils.copyProperties(userdto1,user1);
+			if (Objects.equals(user1.getUserId(), null)) {
+				i.remove();
 			}
-
 		}
 		return result;
 	}
@@ -64,10 +68,10 @@ public class NotificationServiceImpl implements NotificationService{
 	public void update(UserDTO userDTO){
 		User user = new User();
 		BeanUtils.copyProperties(userDTO, user);
-		userRepository.save(user);
 		List<UserDTO> existingUserDTO=findAllUser();
 		User user2 = new User();
-		for (int i=0; i< existingUserDTO.size(); i++){
+		int usrListSize = existingUserDTO.size();
+		for (int i=0; i< usrListSize; i++){
 
 			BeanUtils.copyProperties(existingUserDTO.get(i), user2);
 			if (user2.getUserId()==user.getUserId()){
@@ -75,6 +79,7 @@ public class NotificationServiceImpl implements NotificationService{
 				deleteByUserIdAndId(user.getUserId(),id);
 			}
 		}
+		userRepository.save(user);
 	}
 
 	@Override

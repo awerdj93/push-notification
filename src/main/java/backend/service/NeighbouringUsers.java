@@ -15,10 +15,10 @@ public class NeighbouringUsers {
         String sellerAddr=seller.getSellerAddr();
         double ss=distance(userAddr,sellerAddr);
         User user1= new User();
-        if (ss<5.0){
+        if (ss<=6){
             BeanUtils.copyProperties(user, user1);
-
         }
+
         return user1;
     }
 
@@ -64,7 +64,6 @@ public class NeighbouringUsers {
         catch (ArrayIndexOutOfBoundsException e){
             distance2=Double.parseDouble(distance1);
         }
-        System.out.println(distance2);
         return distance2;
     }
 }
