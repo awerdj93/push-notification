@@ -1,16 +1,12 @@
 package backend.model;
 
-
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +25,7 @@ public class User implements Serializable{
 
     @Column(name="user_id")
     private Long userId;
+    private String user_name;
 
     private String user_addr;
     private String user_email;
@@ -41,5 +38,9 @@ public class User implements Serializable{
     }
     public String getUserAddr() {
         return user_addr;
+    }
+
+    public String getUserEmail() {
+        return user_email;
     }
 }

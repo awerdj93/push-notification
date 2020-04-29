@@ -4,13 +4,11 @@ import backend.dto.UserDTO;
 import backend.model.Seller;
 import backend.model.User;
 import backend.repository.UserRepository;
-
 import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -19,6 +17,8 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class NotificationServiceImpl implements NotificationService{
+
+	//SendEmailHTML sendEmailHTML = new SendEmailHTML();
 
 	@Autowired
 	private UserRepository userRepository;
@@ -33,24 +33,23 @@ public class NotificationServiceImpl implements NotificationService{
 
 
 	@Override
-	public List<UserDTO> sendSdtoForUMailingList(SellerDTO sellerDTO)  throws Exception{
+	public List<UserDTO> neighbouringUserList(SellerDTO sellerDTO)  throws Exception{
 		Seller seller = new Seller();
 		BeanUtils.copyProperties(sellerDTO, seller);
-		//seller = sellerRepository.save(seller);
 		Iterable<User> iterable = userRepository.findAll();
-		Seller finalSeller = seller;
+
 		List<UserDTO> result = StreamSupport.stream(iterable.spliterator(), false).map(new Function<User, UserDTO>() {
-   		@Override
-   		public UserDTO apply(User user) {
-			try {
-				user= NeighbouringUsers.users(user,finalSeller);
-			} catch (Exception e) {
-				e.printStackTrace();
+			@Override
+			public UserDTO apply(User user) {
+				try {
+					user= NeighbouringUser.neighbouringUser(user,seller);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				UserDTO userDTO = new UserDTO();
+				BeanUtils.copyProperties(user, userDTO);
+				return userDTO;
 			}
-			UserDTO userDTO = new UserDTO();
-			BeanUtils.copyProperties(user, userDTO);
-			return userDTO;
-   		}
 		}).collect(Collectors.toList());
 		for (Iterator<UserDTO> i = result.iterator(); i.hasNext();) {
 			UserDTO userdto1 = i.next();
@@ -62,7 +61,6 @@ public class NotificationServiceImpl implements NotificationService{
 		}
 		return result;
 	}
-
 
 	@Override
 	public void update(UserDTO userDTO){

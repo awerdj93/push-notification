@@ -1,31 +1,42 @@
 package backend.service;
 import backend.model.Seller;
 import backend.model.User;
+import backend.repository.UserRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class NeighbouringUsers {
-    public static User users(User user, Seller seller) throws Exception {
+
+public class NeighbouringUser {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public static User neighbouringUser(User user, Seller seller) throws Exception {
         String userAddr=user.getUserAddr();
         String sellerAddr=seller.getSellerAddr();
         double ss=distance(userAddr,sellerAddr);
         User user1= new User();
-        if (ss<=6){
+        if (ss<=5.0){
             BeanUtils.copyProperties(user, user1);
+            String email=user.getUserEmail();
+            Long productId=seller.getProductId();
+            String productLink = "http://Product-stag.eba-nxzhwdny.ap-southeast-1.elasticbeanstalk.com/products/"+productId;
+            if (email!=null){
+                SendEmailHTML.sendmail(email, "Following products are available near you","<h1>You might like the following " +
+                        "products available near you </h1>"+ productLink);
+            }
         }
-
         return user1;
     }
 
     public static <parseString> double distance(String origins, String destinations) throws Exception{
-        //origins="Buona vista MRT, Singapore";
-        //destinations = "Clementi MRT, Singapore";
-
         try {
             origins = URLEncoder.encode(origins, "UTF-8");
         } catch (UnsupportedEncodingException e) {
