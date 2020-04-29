@@ -18,8 +18,7 @@ import java.util.stream.StreamSupport;
 @Service
 public class NotificationServiceImpl implements NotificationService{
 
-	//SendEmailHTML sendEmailHTML = new SendEmailHTML();
-
+	
 	@Autowired
 	private UserRepository userRepository;
 
