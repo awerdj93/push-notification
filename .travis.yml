@@ -12,10 +12,10 @@ deploy:
   skip_cleanup: true
   provider: elasticbeanstalk
   region: "ap-southeast-1"
-  app: "review"
-  env: "review-stag"
+  app: "EmailNotification"
+  env: "notify-stag"
   bucket_name: "elasticbeanstalk-ap-southeast-1-413765782488"
-  bucket_path: "review-stag"
+  bucket_path: "notify-stag"
   on:
     all_branches: true
     condition: $TRAVIS_BRANCH =~ ^release\/.*$	  
