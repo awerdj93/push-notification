@@ -13,9 +13,9 @@ deploy:
   provider: elasticbeanstalk
   region: "ap-southeast-1"
   app: "EmailNotification"
-  env: "notify-env"
+  env: "notification-env"
   bucket_name: "elasticbeanstalk-ap-southeast-1-413765782488"
-  bucket_path: "notify-env"
+  bucket_path: "notification-env"
   on:
     all_branches: true
     condition: $TRAVIS_BRANCH =~ ^release\/.*$	  
