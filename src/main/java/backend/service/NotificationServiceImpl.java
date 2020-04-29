@@ -41,7 +41,8 @@ public class NotificationServiceImpl implements NotificationService{
 			@Override
 			public UserDTO apply(User user) {
 				try {
-					user= NeighbouringUser.neighbouringUser(user,seller);
+					NeighbouringUser nu = new NeighbouringUser();
+					user = nu.neighbouringUser(user,seller);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

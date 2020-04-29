@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -14,29 +15,39 @@ import java.net.URLEncoder;
 
 
 public class NeighbouringUser {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    public static User neighbouringUser(User user, Seller seller) throws Exception {
+	@Autowired
+	private Environment env;
+	
+	private final String PRODUCT_URL_KEY = "microservices.product.url";	
+	private final String EMAIL_USERNAME = "email.username";
+	private final String EMAIL_PASSWORD = "email.password";
+	private final String GOOGLE_API_KEY = "google.api.key";
+	private final String GOOGLE_DISTANCE_API = "https://maps.googleapis.com/maps/api/distancematrix/json";
+	
+    public User neighbouringUser(User user, Seller seller) throws Exception {
         String userAddr=user.getUserAddr();
         String sellerAddr=seller.getSellerAddr();
         double ss=distance(userAddr,sellerAddr);
         User user1= new User();
         if (ss<=5.0){
+        	String username = env.getProperty(EMAIL_USERNAME);
+            String password = env.getProperty(EMAIL_PASSWORD);
+        	
             BeanUtils.copyProperties(user, user1);
-            String email=user.getUserEmail();
-            Long productId=seller.getProductId();
-            String productLink = "http://Product-stag.eba-nxzhwdny.ap-southeast-1.elasticbeanstalk.com/products/"+productId;
+            String email = user.getUserEmail();
+            Long productId = seller.getProductId();
+            
+                    
+            String productLink = env.getProperty(PRODUCT_URL_KEY) + "/products/"+productId;
             if (email!=null){
-                SendEmailHTML.sendmail(email, "Following products are available near you","<h1>You might like the following " +
+                SendEmailHTML.sendmail(username, password, email, "Following products are available near you","<h1>You might like the following " +
                         "products available near you </h1>"+ productLink);
             }
         }
         return user1;
     }
 
-    public static <parseString> double distance(String origins, String destinations) throws Exception{
+    public <parseString> double distance(String origins, String destinations) throws Exception{
         try {
             origins = URLEncoder.encode(origins, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -47,7 +58,7 @@ public class NeighbouringUser {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String httpsURL = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+origins+"&destinations="+destinations+"&key=AIzaSyCsnWpA87MZDsMr9to3aPbZ_WxPBLgZGaU";
+        String httpsURL = GOOGLE_DISTANCE_API + "?origins="+origins+"&destinations="+destinations+"&key=" + env.getProperty(GOOGLE_API_KEY);
         URL myUrl = new URL(httpsURL);
         HttpsURLConnection conn = (HttpsURLConnection)myUrl.openConnection();
         InputStream is = conn.getInputStream();
