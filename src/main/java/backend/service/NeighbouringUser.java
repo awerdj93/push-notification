@@ -15,8 +15,7 @@ import java.net.URLEncoder;
 
 public class NeighbouringUser {
 
-    @Autowired
-    private UserRepository userRepository;
+
 
     public static User neighbouringUser(User user, Seller seller) throws Exception {
         String userAddr=user.getUserAddr();
