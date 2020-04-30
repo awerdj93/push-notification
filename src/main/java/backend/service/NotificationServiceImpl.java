@@ -74,9 +74,10 @@ public class NotificationServiceImpl implements NotificationService{
 			if (user2.getUserId()==user.getUserId()){
 				Long id = user2.getId();
 				deleteByUserIdAndId(user.getUserId(),id);
+				userRepository.save(user);
 			}
 		}
-		userRepository.save(user);
+
 	}
 
 	@Override
