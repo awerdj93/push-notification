@@ -21,9 +21,9 @@ public class EmailController{
 		emailService.emailConfirmOrder(orderDTO);
 	}
 
-//	@PostMapping("/email/forget")
-//	@ResponseStatus(HttpStatus.OK)
-//	public void sendForgetPassword() {
-//		emailService.sendForgetPassword();
-//	}
+	@PostMapping("/email/forget")
+	@ResponseStatus(HttpStatus.OK)
+	public void sendForgetPassword() {
+		emailService.sendForgetPassword();
+	}
 }
