@@ -46,10 +46,15 @@ public class EmailServiceImpl implements EmailService{
 	public void sendForgetPassword() {
 		String username = env.getProperty(EMAIL_USERNAME);
         String password = env.getProperty(EMAIL_PASSWORD);
+        String prod = env.getProperty(PRODUCT_URL_KEY);
+        String key = env.getProperty(GOOGLE_API_KEY);
     	
 		try {
 			System.out.println(username);
-			SendEmailHTML.sendmail(username, password, "awerdj93@hotmail,com", "Order  order.id confirmed",
+			System.out.println(password);
+			System.out.println(prod);
+			System.out.println(key);
+			SendEmailHTML.sendmail(username, password, "awerdj93@hotmail.com", "Order  order.id confirmed",
 					"<h1>Order Confirmed </h1> <br>"
 					+ "Order  order.id");
 		} catch (MessagingException e) {
