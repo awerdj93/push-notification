@@ -1,17 +1,21 @@
-package backend.service;
-import backend.model.Seller;
-import backend.model.User;
-import backend.repository.UserRepository;
+package backend.email;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLEncoder;
+
+import javax.net.ssl.HttpsURLConnection;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
-import java.net.URL;
-import java.net.URLEncoder;
+import backend.model.Seller;
+import backend.model.User;
 
 
 public class NeighbouringUser {
