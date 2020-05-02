@@ -1,19 +1,22 @@
 package backend.service;
-import backend.dto.SellerDTO;
-import backend.dto.UserDTO;
-import backend.model.Seller;
-import backend.model.User;
-import backend.repository.UserRepository;
 import java.util.Iterator;
 import java.util.List;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import backend.dto.SellerDTO;
+import backend.dto.UserDTO;
+import backend.email.NeighbouringUser;
+import backend.model.Seller;
+import backend.model.User;
+import backend.repository.UserRepository;
 
 @Service
 public class NotificationServiceImpl implements NotificationService{
@@ -41,7 +44,8 @@ public class NotificationServiceImpl implements NotificationService{
 			@Override
 			public UserDTO apply(User user) {
 				try {
-					user= NeighbouringUser.neighbouringUser(user,seller);
+					NeighbouringUser nu = new NeighbouringUser();
+					user= nu.neighbouringUser(user,seller);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
