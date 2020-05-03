@@ -9,6 +9,7 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import backend.dto.SellerDTO;
@@ -21,7 +22,17 @@ import backend.repository.UserRepository;
 @Service
 public class NotificationServiceImpl implements NotificationService{
 
-	
+	@Autowired
+	public Environment env;
+
+	public final String PRODUCT_URL = "microservices.product.url";
+	public final String EMAIL_USERNAME = "email.username";
+	public final String EMAIL_PASSWORD = "email.password";
+	public final String GOOGLE_API_KEY = "google.api.key";
+	public final String GOOGLE_DISTANCE_API = "https://maps.googleapis.com/maps/api/distancematrix/json";
+
+
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -45,7 +56,8 @@ public class NotificationServiceImpl implements NotificationService{
 			public UserDTO apply(User user) {
 				try {
 					NeighbouringUser nu = new NeighbouringUser();
-					user= nu.neighbouringUser(user,seller);
+					//System.out.println(PRODUCT_URL_KEY1+","+env1.getProperty(EMAIL_USERNAME1)+","+env1.getProperty(EMAIL_PASSWORD1)+","+GOOGLE_DISTANCE_API1+","+env1.getProperty(GOOGLE_API_KEY1));
+					user= nu.neighbouringUser(user,seller,env.getProperty(PRODUCT_URL),env.getProperty(EMAIL_USERNAME), env.getProperty(EMAIL_PASSWORD),GOOGLE_DISTANCE_API,env.getProperty(GOOGLE_API_KEY));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

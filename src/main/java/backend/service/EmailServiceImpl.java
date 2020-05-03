@@ -17,9 +17,9 @@ public class EmailServiceImpl implements EmailService{
 	
 	private final String EMAIL_USERNAME = "email.username";
 	private final String EMAIL_PASSWORD = "email.password";
-	private final String PRODUCT_URL_KEY = "microservices.product.url";	
+	private final String PRODUCT_URL_KEY = "microservices.product.url";
 	private final String GOOGLE_API_KEY = "google.api.key";
-	
+
 	@Override
 	public void emailConfirmOrder(OrderDTO orderDTO) {
 		String username = env.getProperty(EMAIL_USERNAME);
@@ -54,7 +54,7 @@ public class EmailServiceImpl implements EmailService{
 			System.out.println(password);
 			System.out.println(prod);
 			System.out.println(key);
-			SendEmailHTML.sendmail(username, password, "awerdj93@hotmail.com", "Order  order.id confirmed",
+			SendEmailHTML.sendmail(username, password, "survimails@gmail.com", "Order  order.id confirmed",
 					"<h1>Order Confirmed </h1> <br>"
 					+ "Order  order.id");
 		} catch (MessagingException e) {

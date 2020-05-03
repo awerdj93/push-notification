@@ -6,12 +6,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import javax.annotation.Resource;
 import javax.net.ssl.HttpsURLConnection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
 import backend.model.Seller;
@@ -19,31 +21,25 @@ import backend.model.User;
 
 
 public class NeighbouringUser {
-	@Autowired
-	private Environment env;	
-	
-	private final String PRODUCT_URL_KEY = "microservices.product.url";	
-	private final String EMAIL_USERNAME = "email.username";
-	private final String EMAIL_PASSWORD = "email.password";
-	private final String GOOGLE_API_KEY = "google.api.key";
-	private final String GOOGLE_DISTANCE_API = "https://maps.googleapis.com/maps/api/distancematrix/json";
-	
-	
-    public User neighbouringUser(User user, Seller seller) throws Exception {
+
+
+    public User neighbouringUser(User user, Seller seller, String PRODUCT_URL_KEY,String username, String password, String GOOGLE_DISTANCE_API, String GOOGLE_API_KEY) throws Exception {
+
+
         String userAddr=user.getUserAddr();
         String sellerAddr=seller.getSellerAddr();
-        double ss=distance(userAddr,sellerAddr);
+        double ss=distance(userAddr,sellerAddr, GOOGLE_DISTANCE_API, GOOGLE_API_KEY);
+
+
         User user1= new User();
         if (ss<=5.0){
         	
-        	String username = env.getProperty(EMAIL_USERNAME);
-            String password = env.getProperty(EMAIL_PASSWORD);
-            System.out.println(username);
+
             BeanUtils.copyProperties(user, user1);
             String email=user.getUserEmail();
             Long productId=seller.getProductId();
 
-            String productLink = env.getProperty(PRODUCT_URL_KEY) + "/products/"+productId;
+            String productLink = PRODUCT_URL_KEY + "/products/"+productId;
             if (email!=null){
                 SendEmailHTML.sendmail(username, password, email, "Following products are available near you","<h1>You might like the following " +
                         "products available near you </h1>"+ productLink);
@@ -51,8 +47,8 @@ public class NeighbouringUser {
         }
         return user1;
     }
-
-    public <parseString> double distance(String origins, String destinations) throws Exception{
+    @Bean
+    public <parseString> double distance(String origins, String destinations, String GOOGLE_DISTANCE_API, String GOOGLE_API_KEY) throws Exception{
         try {
             origins = URLEncoder.encode(origins, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -63,8 +59,9 @@ public class NeighbouringUser {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String httpsURL = env.getProperty(GOOGLE_DISTANCE_API) + "?origins="+origins+"&destinations="+destinations+"&key=" + env.getProperty(GOOGLE_API_KEY);
+        String httpsURL = GOOGLE_DISTANCE_API + "?origins="+origins+"&destinations="+destinations+"&key=" + GOOGLE_API_KEY;
         URL myUrl = new URL(httpsURL);
+        System.out.println(httpsURL);
         HttpsURLConnection conn = (HttpsURLConnection)myUrl.openConnection();
         InputStream is = conn.getInputStream();
         InputStreamReader isr = new InputStreamReader(is);
@@ -91,6 +88,7 @@ public class NeighbouringUser {
         catch (ArrayIndexOutOfBoundsException e){
             distance2=Double.parseDouble(distance1);
         }
+        //System.out.println("distance="+distance2);
         return distance2;
     }
 }

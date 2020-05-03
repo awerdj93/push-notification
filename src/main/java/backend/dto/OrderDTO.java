@@ -31,8 +31,12 @@ public class OrderDTO implements Serializable{
 	private Address billingAddress;
 	
 	private List<Item> items;
-	
-	@Getter
+
+    public long getId() {
+    	return id;
+    }
+
+    @Getter
 	@Setter
 	@ToString
 	public static class Item implements Serializable{
