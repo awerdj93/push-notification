@@ -63,7 +63,7 @@ public class NeighbouringUser {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String httpsURL = GOOGLE_DISTANCE_API + "?origins="+origins+"&destinations="+destinations+"&key=" + env.getProperty(GOOGLE_API_KEY);
+        String httpsURL = env.getProperty(GOOGLE_DISTANCE_API) + "?origins="+origins+"&destinations="+destinations+"&key=" + env.getProperty(GOOGLE_API_KEY);
         URL myUrl = new URL(httpsURL);
         HttpsURLConnection conn = (HttpsURLConnection)myUrl.openConnection();
         InputStream is = conn.getInputStream();
