@@ -26,6 +26,7 @@ public class NotificationServiceImpl implements NotificationService{
 	public Environment env;
 
 	public final String PRODUCT_URL = "microservices.product.url";
+	public final String DELETE_URL = "microservices.delete.url";
 	public final String EMAIL_USERNAME = "email.username";
 	public final String EMAIL_PASSWORD = "email.password";
 	public final String GOOGLE_API_KEY = "google.api.key";
@@ -57,7 +58,7 @@ public class NotificationServiceImpl implements NotificationService{
 				try {
 					NeighbouringUser nu = new NeighbouringUser();
 					//System.out.println(PRODUCT_URL_KEY1+","+env1.getProperty(EMAIL_USERNAME1)+","+env1.getProperty(EMAIL_PASSWORD1)+","+GOOGLE_DISTANCE_API1+","+env1.getProperty(GOOGLE_API_KEY1));
-					user= nu.neighbouringUser(user,seller,env.getProperty(PRODUCT_URL),env.getProperty(EMAIL_USERNAME), env.getProperty(EMAIL_PASSWORD),GOOGLE_DISTANCE_API,env.getProperty(GOOGLE_API_KEY));
+					user= nu.neighbouringUser(user,seller,env.getProperty(PRODUCT_URL),env.getProperty(EMAIL_USERNAME), env.getProperty(EMAIL_PASSWORD),GOOGLE_DISTANCE_API,env.getProperty(GOOGLE_API_KEY), env.getProperty(DELETE_URL));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -23,7 +23,7 @@ import backend.model.User;
 public class NeighbouringUser {
 
 
-    public User neighbouringUser(User user, Seller seller, String PRODUCT_URL_KEY,String username, String password, String GOOGLE_DISTANCE_API, String GOOGLE_API_KEY) throws Exception {
+    public User neighbouringUser(User user, Seller seller, String PRODUCT_URL,String username, String password, String GOOGLE_DISTANCE_API, String GOOGLE_API_KEY, String DELETE_URL) throws Exception {
 
 
         String userAddr=user.getUserAddr();
@@ -38,11 +38,14 @@ public class NeighbouringUser {
             BeanUtils.copyProperties(user, user1);
             String email=user.getUserEmail();
             Long productId=seller.getProductId();
+            Long userId = user1.getUserId();
+            Long subId = user1.getId();
 
-            String productLink = PRODUCT_URL_KEY + "/products/"+productId;
+            String productLink = PRODUCT_URL + "/products/"+productId;
+            String unsubscriptionLink= DELETE_URL+subId+"/users/"+userId;
             if (email!=null){
                 SendEmailHTML.sendmail(username, password, email, "Following products are available near you","<h1>You might like the following " +
-                        "products available near you </h1>"+ productLink);
+                        "products available near you </h1>"+ productLink+". To unsubscribe from the service click here "+ unsubscriptionLink);
             }
         }
         return user1;
