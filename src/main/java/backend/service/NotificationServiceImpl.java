@@ -27,9 +27,9 @@ public class NotificationServiceImpl implements NotificationService{
 
 	@Override
 	public Long addUser(SubscriberDTO subscriberDTO) {
-		List<User> list = userRepository.findByUserId(subscriberDTO.getUserId());
-		if (list!=null && list.size()>0) {
-			return list.get(0).getId();	
+		Optional<User> opt = userRepository.findByUserId(subscriberDTO.getUserId());
+		if (opt.isPresent()) {
+			return opt.get().getId();	
 		}
 		else {
 			User user = new User();
@@ -92,13 +92,11 @@ public class NotificationServiceImpl implements NotificationService{
 
 	@Override
 	public void deleteByUserIdAndId(Long userId, Long id) {
-		Optional<User> userOpt = userRepository.findById(id);
-		if(userOpt.isPresent()) {
-			User user = userOpt.get();
-			if(user.getUserId().equals(userId)) {
-				userRepository.deleteById(id);
-			}
-		}
+//		Optional<User> userOpt = userRepository.findById(id);
+//		if(userOpt.isPresent()) {
+//			User user = userOpt.get();
+			userRepository.deleteById(id);
+//		}
 	}
 
 	@Override
@@ -121,11 +119,11 @@ public class NotificationServiceImpl implements NotificationService{
 
 	@Override
 	public SubscriberDTO getByUser(Long userId) {
-		List<User> list = userRepository.findByUserId(userId);
+		Optional<User> opt = userRepository.findByUserId(userId);
 		SubscriberDTO dto = null;
-		if (list != null && list.size() > 0) {
+		if (opt.isPresent()) {
 			dto = new SubscriberDTO();
-			BeanUtils.copyProperties(list.get(0), dto);
+			BeanUtils.copyProperties(opt.get(), dto);
 		}
 		return dto;
 	}

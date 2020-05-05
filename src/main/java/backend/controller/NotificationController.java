@@ -39,7 +39,7 @@ public class NotificationController{
 	}
 
 
-	@DeleteMapping("subscribers/{subId}/users/{userId}")
+	@DeleteMapping(value = "/subscribers/{subId}/users/{userId}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteByUserIdAndId(@PathVariable Long subId, @PathVariable Long userId) {
 		notificationService.deleteByUserIdAndId(userId, subId);
