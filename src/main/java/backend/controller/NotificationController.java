@@ -19,6 +19,12 @@ public class NotificationController{
 	public List<UserDTO> findAllUser() {
 		return notificationService.findAllUser();
 	}
+	
+	@GetMapping("subscribers/users/{userId}")
+	@ResponseStatus(HttpStatus.OK)
+	public UserDTO findByUser(@PathVariable Long userId) {
+		return notificationService.getByUser(userId);
+	}
 
 	@PostMapping("subscribers/users/{userId}")//This saves a record of userdto, who subscribed for the email notification service in the database
 	@ResponseStatus(HttpStatus.CREATED)
@@ -33,10 +39,10 @@ public class NotificationController{
 	}
 
 
-	@DeleteMapping("subscribers/{id}/users/{userId}")
+	@DeleteMapping("subscribers/{subId}/users/{userId}")
 	@ResponseStatus(HttpStatus.OK)
-	public void deleteByUserIdAndId(@RequestBody Long userId, Long id) {
-		notificationService.deleteByUserIdAndId(userId, id);
+	public void deleteByUserIdAndId(@PathVariable Long subId, @PathVariable Long userId) {
+		notificationService.deleteByUserIdAndId(userId, subId);
 	}
 
 	@PostMapping("notifications/sellers/{sellerId}")

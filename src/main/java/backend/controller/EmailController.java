@@ -17,8 +17,8 @@ public class EmailController{
 
 	@PostMapping("/email/order")
 	@ResponseStatus(HttpStatus.OK)
-	public void sendConfirmOrder(@RequestBody OrderDTO orderDTO) {
-		emailService.emailConfirmOrder(orderDTO);
+	public void sendConfirmOrder(@RequestBody long id, @RequestBody OrderDTO orderDTO) {
+		emailService.emailConfirmOrder(id,orderDTO);
 	}
 
 	@PostMapping("/email/forget")

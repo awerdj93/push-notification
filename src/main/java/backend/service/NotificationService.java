@@ -9,4 +9,5 @@ public interface NotificationService {
 	public Long addUser(UserDTO userDTO);
 	public void update(UserDTO userDTO);
 	public void deleteByUserIdAndId(Long userId, Long id);
+	public UserDTO getByUser(Long userId);
 }

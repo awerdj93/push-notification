@@ -1,4 +1,5 @@
 package backend.service;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -95,9 +96,6 @@ public class NotificationServiceImpl implements NotificationService{
 		}
 	}
 
-
-
-
 	@Override
 	public List<UserDTO> findAllUser() {
 		Iterable<User> iterable = userRepository.findAll();
@@ -113,5 +111,17 @@ public class NotificationServiceImpl implements NotificationService{
 		}).collect(Collectors.toList());
 
 		return result;
+	}
+
+
+	@Override
+	public UserDTO getByUser(Long userId) {
+		List<User> list = userRepository.findByUserId(userId);
+		UserDTO dto = null;
+		if (list != null && list.size() > 0) {
+			dto = new UserDTO();
+			BeanUtils.copyProperties(list.get(0), dto);
+		}
+		return dto;
 	}
 }

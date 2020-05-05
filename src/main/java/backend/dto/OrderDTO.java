@@ -18,8 +18,6 @@ public class OrderDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private long id;
-
 	private long userId;
 	
 	private BigDecimal subTotalPrice;

@@ -21,14 +21,19 @@ public class EmailServiceImpl implements EmailService{
 	private final String GOOGLE_API_KEY = "google.api.key";
 	
 	@Override
-	public void emailConfirmOrder(OrderDTO orderDTO) {
+	public void emailConfirmOrder(Long id, OrderDTO orderDTO) {
 		String username = env.getProperty(EMAIL_USERNAME);
         String password = env.getProperty(EMAIL_PASSWORD);
     	
-		try {
-			SendEmailHTML.sendmail(username, password, "awerdj93@hotmail.com", "Order " + orderDTO.getId() + " confirmed",
-					"<h1>Order Confirmed </h1> <br>"
-					+ "Order  order.id");
+        String title = "Order " + id + " confirmed";
+    	// message contains HTML markups
+        String message = "<h1>Order Confirmed </h1> <br>";
+        message += "Order Reference: " + id;
+        message += "<font color=red>Duke</font>";
+               
+		try {			
+			SendEmailHTML.sendmail(username, password, "awerdj93@hotmail.com",title ,
+					message);
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

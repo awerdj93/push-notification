@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface EmailService {
 	
-	public void emailConfirmOrder(OrderDTO orderDTO);
+	public void emailConfirmOrder(Long id, OrderDTO orderDTO);
 	
 	public void welcome(UserDTO userDTO);
 	
