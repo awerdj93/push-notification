@@ -1,5 +1,5 @@
 package backend.controller;
-import backend.dto.UserDTO;
+import backend.dto.SubscriberDTO;
 import backend.service.EmailService;
 import backend.dto.OrderDTO;
 import backend.dto.SellerDTO;

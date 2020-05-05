@@ -6,7 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import backend.dto.OrderDTO;
-import backend.dto.UserDTO;
+import backend.dto.SubscriberDTO;
 import backend.email.SendEmailHTML;
 import backend.repository.UserRepository;
 
@@ -40,9 +40,9 @@ public class EmailServiceImpl implements EmailService{
 		}
 	}
 
-	// Hmm i need userDTO
+	// Hmm i need subscriberDTO
 	@Override
-	public void welcome(UserDTO userDTO) {
+	public void welcome(SubscriberDTO subscriberDTO) {
 		// TODO Auto-generated method stub
 		
 	}

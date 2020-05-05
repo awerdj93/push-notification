@@ -1,5 +1,4 @@
 package backend.service;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import backend.dto.SellerDTO;
-import backend.dto.UserDTO;
+import backend.dto.SubscriberDTO;
 import backend.email.NeighbouringUser;
 import backend.model.Seller;
 import backend.model.User;
@@ -27,36 +26,42 @@ public class NotificationServiceImpl implements NotificationService{
 	private UserRepository userRepository;
 
 	@Override
-	public Long addUser(UserDTO userDTO) {
-		User user = new User();
-		BeanUtils.copyProperties(userDTO, user);
-		user = userRepository.save(user);
-		return user.getUserId();
+	public Long addUser(SubscriberDTO subscriberDTO) {
+		List<User> list = userRepository.findByUserId(subscriberDTO.getUserId());
+		if (list!=null && list.size()>0) {
+			return list.get(0).getId();	
+		}
+		else {
+			User user = new User();
+			BeanUtils.copyProperties(subscriberDTO, user);
+			user = userRepository.save(user);
+			return user.getUserId();
+		}
 	}
 
 
 	@Override
-	public List<UserDTO> neighbouringUserList(SellerDTO sellerDTO)  throws Exception{
+	public List<SubscriberDTO> neighbouringUserList(SellerDTO sellerDTO)  throws Exception{
 		Seller seller = new Seller();
 		BeanUtils.copyProperties(sellerDTO, seller);
 		Iterable<User> iterable = userRepository.findAll();
 
-		List<UserDTO> result = StreamSupport.stream(iterable.spliterator(), false).map(new Function<User, UserDTO>() {
+		List<SubscriberDTO> result = StreamSupport.stream(iterable.spliterator(), false).map(new Function<User, SubscriberDTO>() {
 			@Override
-			public UserDTO apply(User user) {
+			public SubscriberDTO apply(User user) {
 				try {
 					NeighbouringUser nu = new NeighbouringUser();
 					user= nu.neighbouringUser(user,seller);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				UserDTO userDTO = new UserDTO();
-				BeanUtils.copyProperties(user, userDTO);
-				return userDTO;
+				SubscriberDTO subscriberDTO = new SubscriberDTO();
+				BeanUtils.copyProperties(user, subscriberDTO);
+				return subscriberDTO;
 			}
 		}).collect(Collectors.toList());
-		for (Iterator<UserDTO> i = result.iterator(); i.hasNext();) {
-			UserDTO userdto1 = i.next();
+		for (Iterator<SubscriberDTO> i = result.iterator(); i.hasNext();) {
+			SubscriberDTO userdto1 = i.next();
 			User user1 = new User();
 			BeanUtils.copyProperties(userdto1,user1);
 			if (Objects.equals(user1.getUserId(), null)) {
@@ -67,15 +72,15 @@ public class NotificationServiceImpl implements NotificationService{
 	}
 
 	@Override
-	public void update(UserDTO userDTO){
+	public void update(SubscriberDTO subscriberDTO){
 		User user = new User();
-		BeanUtils.copyProperties(userDTO, user);
-		List<UserDTO> existingUserDTO=findAllUser();
+		BeanUtils.copyProperties(subscriberDTO, user);
+		List<SubscriberDTO> existingDTO=findAllUser();
 		User user2 = new User();
-		int usrListSize = existingUserDTO.size();
+		int usrListSize = existingDTO.size();
 		for (int i=0; i< usrListSize; i++){
 
-			BeanUtils.copyProperties(existingUserDTO.get(i), user2);
+			BeanUtils.copyProperties(existingDTO.get(i), user2);
 			if (user2.getUserId()==user.getUserId()){
 				Long id = user2.getId();
 				deleteByUserIdAndId(user.getUserId(),id);
@@ -97,16 +102,16 @@ public class NotificationServiceImpl implements NotificationService{
 	}
 
 	@Override
-	public List<UserDTO> findAllUser() {
+	public List<SubscriberDTO> findAllUser() {
 		Iterable<User> iterable = userRepository.findAll();
 
-		List<UserDTO> result = StreamSupport.stream(iterable.spliterator(), false).map(new Function<User, UserDTO>() {
+		List<SubscriberDTO> result = StreamSupport.stream(iterable.spliterator(), false).map(new Function<User, SubscriberDTO>() {
 			@Override
-			public UserDTO apply(User user) {
-				UserDTO userDTO = new UserDTO();
-				BeanUtils.copyProperties(user, userDTO);
+			public SubscriberDTO apply(User user) {
+				SubscriberDTO subscriberDTO = new SubscriberDTO();
+				BeanUtils.copyProperties(user, subscriberDTO);
 
-				return userDTO;
+				return subscriberDTO;
 			}
 		}).collect(Collectors.toList());
 
@@ -115,11 +120,11 @@ public class NotificationServiceImpl implements NotificationService{
 
 
 	@Override
-	public UserDTO getByUser(Long userId) {
+	public SubscriberDTO getByUser(Long userId) {
 		List<User> list = userRepository.findByUserId(userId);
-		UserDTO dto = null;
+		SubscriberDTO dto = null;
 		if (list != null && list.size() > 0) {
-			dto = new UserDTO();
+			dto = new SubscriberDTO();
 			BeanUtils.copyProperties(list.get(0), dto);
 		}
 		return dto;

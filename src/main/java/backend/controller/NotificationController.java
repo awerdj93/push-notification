@@ -1,5 +1,5 @@
 package backend.controller;
-import backend.dto.UserDTO;
+import backend.dto.SubscriberDTO;
 import backend.dto.SellerDTO;
 import backend.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +16,26 @@ public class NotificationController{
 
 	@GetMapping("subscribers/users")
 	@ResponseStatus(HttpStatus.OK)
-	public List<UserDTO> findAllUser() {
+	public List<SubscriberDTO> findAllUser() {
 		return notificationService.findAllUser();
 	}
 	
 	@GetMapping("subscribers/users/{userId}")
 	@ResponseStatus(HttpStatus.OK)
-	public UserDTO findByUser(@PathVariable Long userId) {
+	public SubscriberDTO findByUser(@PathVariable Long userId) {
 		return notificationService.getByUser(userId);
 	}
 
 	@PostMapping("subscribers/users/{userId}")//This saves a record of userdto, who subscribed for the email notification service in the database
 	@ResponseStatus(HttpStatus.CREATED)
-	public Long addUser(@RequestBody UserDTO userDTO) {
-		return notificationService.addUser(userDTO);
+	public Long addUser(@RequestBody SubscriberDTO subscriberDTO) {
+		return notificationService.addUser(subscriberDTO);
 	}
 
 	@PutMapping("subscribers/users/{userId}")
 	@ResponseStatus(HttpStatus.OK)
-	public void update(@RequestBody UserDTO userDTO) {
-		notificationService.update(userDTO);
+	public void update(@RequestBody SubscriberDTO subscriberDTO) {
+		notificationService.update(subscriberDTO);
 	}
 
 
@@ -47,7 +47,7 @@ public class NotificationController{
 
 	@PostMapping("notifications/sellers/{sellerId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public List<UserDTO> neighbouringUserList(@RequestBody SellerDTO sellerDTO) throws Exception {
+	public List<SubscriberDTO> neighbouringUserList(@RequestBody SellerDTO sellerDTO) throws Exception {
 		return notificationService.neighbouringUserList(sellerDTO);
 	}
 }
