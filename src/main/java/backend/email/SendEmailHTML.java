@@ -1,4 +1,4 @@
-package backend.service;
+package backend.email;
 
 
 import java.io.IOException;
@@ -11,10 +11,7 @@ import javax.mail.internet.MimeMessage;
 
 public class SendEmailHTML {
 
-    public static void sendmail(String EMAIL_TO, String subject, String content) throws MessagingException {
-        final String username = "werfoodsaver";
-        final String password = "JYBdG7z%w89f";
-
+    public static void sendmail(String username, String password, String EMAIL_TO, String subject, String content) throws MessagingException {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");

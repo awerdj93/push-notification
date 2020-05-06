@@ -1,24 +1,39 @@
 package backend.service;
-import backend.dto.SellerDTO;
-import backend.dto.UserDTO;
-import backend.model.Seller;
-import backend.model.User;
-import backend.repository.UserRepository;
 import java.util.Iterator;
 import java.util.List;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
+
+import backend.dto.SellerDTO;
+import backend.dto.UserDTO;
+import backend.email.NeighbouringUser;
+import backend.model.Seller;
+import backend.model.User;
+import backend.repository.UserRepository;
+
 @Service
 public class NotificationServiceImpl implements NotificationService{
 
-	
+	@Autowired
+	public Environment env;
+
+	public final String PRODUCT_URL = "microservices.product.url";
+	public final String DELETE_URL = "microservices.delete.url";
+	public final String EMAIL_USERNAME = "email.username";
+	public final String EMAIL_PASSWORD = "email.password";
+	public final String GOOGLE_API_KEY = "google.api.key";
+	public final String GOOGLE_DISTANCE_API = "https://maps.googleapis.com/maps/api/distancematrix/json";
+
+
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -41,7 +56,9 @@ public class NotificationServiceImpl implements NotificationService{
 			@Override
 			public UserDTO apply(User user) {
 				try {
-					user= NeighbouringUser.neighbouringUser(user,seller);
+					NeighbouringUser nu = new NeighbouringUser();
+					//System.out.println(PRODUCT_URL_KEY1+","+env1.getProperty(EMAIL_USERNAME1)+","+env1.getProperty(EMAIL_PASSWORD1)+","+GOOGLE_DISTANCE_API1+","+env1.getProperty(GOOGLE_API_KEY1));
+					user= nu.neighbouringUser(user,seller,env.getProperty(PRODUCT_URL),env.getProperty(EMAIL_USERNAME), env.getProperty(EMAIL_PASSWORD),GOOGLE_DISTANCE_API,env.getProperty(GOOGLE_API_KEY), env.getProperty(DELETE_URL));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -74,9 +91,10 @@ public class NotificationServiceImpl implements NotificationService{
 			if (user2.getUserId()==user.getUserId()){
 				Long id = user2.getId();
 				deleteByUserIdAndId(user.getUserId(),id);
+				userRepository.save(user);
 			}
 		}
-		userRepository.save(user);
+
 	}
 
 	@Override
