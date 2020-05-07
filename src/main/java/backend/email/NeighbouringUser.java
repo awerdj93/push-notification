@@ -41,7 +41,7 @@ public class NeighbouringUser {
             Long userId = user1.getUserId();
             Long subId = user1.getId();
 
-            String productLink = PRODUCT_URL + "/products/"+productId;
+            String productLink = PRODUCT_URL + "/product/"+productId;
             String unsubscriptionLink= DELETE_URL;
             if (email!=null){
                 SendEmailHTML.sendmail(username, password, email, "Following products are available near you","<h1>You might like the following " +
