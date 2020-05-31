@@ -13,7 +13,14 @@ public class SellerDTO {
 
     private Long productId;
 
-
     private String seller_addr;
+
+    public void setSellerId(long sellerId) {
+        this.sellerId=sellerId;
+    }
+    public void  setSeller_addr(String seller_addr) {
+        this.seller_addr=seller_addr;
+    }
+
 
 }

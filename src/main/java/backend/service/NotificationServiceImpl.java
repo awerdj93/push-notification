@@ -24,7 +24,6 @@ public class NotificationServiceImpl implements NotificationService{
 
 	@Autowired
 	public Environment env;
-
 	public final String PRODUCT_URL = "microservices.product.url";
 	public final String DELETE_URL = "microservices.delete.url";
 	public final String EMAIL_USERNAME = "email.username";
@@ -73,7 +72,7 @@ public class NotificationServiceImpl implements NotificationService{
 			BeanUtils.copyProperties(userdto1,user1);
 			if (Objects.equals(user1.getUserId(), null)) {
 				i.remove();
-			}
+			}List<UserDTO> existingUserDTO=findAllUser();
 		}
 		return result;
 	}
